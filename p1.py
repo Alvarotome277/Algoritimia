@@ -1,6 +1,7 @@
 import time # Para la función time_measure. Entender código dado.
 import matplotlib.pyplot as plt # Para imprimir gráficas. Entender código dado.
 import random # Puede usarse random.randint(n, m) para generar listas aleatorias de enteros en las funciones dataprep.
+import numpy as np
 
 # I.A.1 Medición de tiempos de ejecución
 def time_measure(f, dataprep, Nlist, Nrep=1000, Nstat=100):
@@ -28,6 +29,8 @@ def dataprep_sum_pair_hit(n):
     """Genera un caso donde SÍ existe un par que suma target.
     Devuelve una tupla (lista, target)
     """
+
+
     pass
 
 def dataprep_sum_pair_miss(n):
@@ -179,3 +182,70 @@ def plot_single_curve(
         )  #
 
     plt.show()  # Muestra la figura
+
+
+def init_cd(n: int)-> np.ndarray:
+    p = len(n) * [-1]  # se crea una tabla (lista) de tamaño |n| en la que 
+                       # todas las componentes se inicializan a -1
+    return p
+
+def find_cc(ind: int, p_cd: np.ndarray) -> int:
+    # find the representative
+    z = ind
+    
+    # get the root (representant)
+    while p_cd[z] > -1:
+        z = p_cd[z]
+        
+    # compress the path from u to the root
+    while p_cd[u] >-1:
+        y = p_cd[u]
+        p_cd[u] = z
+        u = y
+    return z
+
+
+def union(rep_1: int, rep_2: int, p_cd: np.ndarray) -> int:
+        
+        x = find_cc(rep_1)
+        y = find_cc(rep_2)
+        
+        if x == y:
+            return None
+        
+        if p_cd[y] < p_cd[x]:      # T_y is taller
+            p_cd[x] = y
+            return y  
+        
+        elif p_cd[y] > p_cd[x]:    # T_x is taller
+            p_cd[y] = x 
+            return x
+        
+        else:                # T_x, T_y have the same lenght
+            p_cd[y] = x
+            p_cd[x] -= 1        # Increase the height
+            return   x    
+
+
+
+
+'que reciba un CD en el array p_cd y devuelva un diccionario cuyas claves sean los representantes de los'
+'subconjuntos del CD y donde el valor de la clave u del dict sea una lista con los miembros del subconjunto'
+'representado por u , incluyendo, por supuesto el propio u .'
+
+def cd_2_dict(p_cd: np.ndarray)-> dict:
+
+    diccionario = dict()
+    longitud = len (p_cd)
+    j = 0
+    for i in range (longitud):
+        representante = diccionario(find_cc(i, p_cd))
+
+        if representante not in diccionario:
+            diccionario[representante] = []
+
+        diccionario[representante].append(i)
+
+
+            
+ def ccs(n: int, l: List)-> Dict           
