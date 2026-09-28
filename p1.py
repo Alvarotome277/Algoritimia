@@ -248,4 +248,4 @@ def cd_2_dict(p_cd: np.ndarray)-> dict:
 
 
             
- def ccs(n: int, l: List)-> Dict           
+def ccs(n: int, l: List)-> Dict           
