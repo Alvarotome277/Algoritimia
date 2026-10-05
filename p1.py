@@ -129,7 +129,6 @@ def rle_encode_optimized(lst):
                 
     return last_lst
 
-
         
             
 
@@ -237,7 +236,6 @@ def cd_2_dict(p_cd: np.ndarray)-> dict:
 
     diccionario = dict()
     longitud = len (p_cd)
-    j = 0
     for i in range (longitud):
         representante = diccionario(find_cc(i, p_cd))
 
@@ -248,4 +246,10 @@ def cd_2_dict(p_cd: np.ndarray)-> dict:
 
 
             
-def ccs(n: int, l: List)-> Dict           
+def ccs(n: int, l: list)-> dict: 
+    diccionario = dict ()
+    longitud = len (l)
+    for i in range (longitud):
+        representante = l [i]
+        diccionario 
+
