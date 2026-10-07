@@ -29,20 +29,32 @@ def dataprep_sum_pair_hit(n):
     """Genera un caso donde SÍ existe un par que suma target.
     Devuelve una tupla (lista, target)
     """
+    random1 =random.randint(0,n-1)
+    random2 =random.randint (0,n-1)
+    while random1 == random2:
+       random2 = random.randint(0, n - 1)
+    lista = [random.randint(0, n-1) for i in range(n)]
+    target = random.randint(0,n)
+    lista [random1] = target - lista [random2]
+    return (lista, target)
+            
+        
 
-
-    pass
+   
 
 def dataprep_sum_pair_miss(n):
     """Genera un caso donde NO existe ningún par (Caso peor).
     Devuelve una tupla (lista, target)
     """
-    pass
+    target = random.randint(0,n)
+    lista = [target + 1 + random.randint(0, n-1) for i in range(n)]
+    return (lista, target)
 
 def dataprep_rle(n):
     """Genera una lista con rachas repetidas de dimensión n.
     Devuelve una lista.
     """
+    
     pass
 
 # I.A.2 Búsqueda de duplicados manteniendo orden de aparición
