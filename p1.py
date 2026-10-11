@@ -32,15 +32,13 @@ def dataprep_sum_pair_hit(n):
     random1 =random.randint(0,n-1)
     random2 =random.randint (0,n-1)
     while random1 == random2:
-       random2 = random.randint(0, n - 1)
+        random2 = random.randint(0, n - 1)
     lista = [random.randint(0, n-1) for i in range(n)]
     target = random.randint(0,n)
     lista [random1] = target - lista [random2]
     return (lista, target)
             
         
-
-   
 
 def dataprep_sum_pair_miss(n):
     """Genera un caso donde NO existe ningún par (Caso peor).
@@ -54,8 +52,12 @@ def dataprep_rle(n):
     """Genera una lista con rachas repetidas de dimensión n.
     Devuelve una lista.
     """
-    
-    pass
+    lista = []
+    while len(lista) < n:
+        elemento = random.randint(0, 9)
+        longitud_racha = random.randint(1, 10)
+        lista.extend([elemento] * longitud_racha)
+    return lista[:n] 
 
 # I.A.2 Búsqueda de duplicados manteniendo orden de aparición
 def find_duplicates(lst):
@@ -67,7 +69,7 @@ def find_duplicates(lst):
     longitud = len(lst)
     for i in range(longitud):
         if lst[i] not in lst_aux:
-         lst_aux.append(lst[i])
+            lst_aux.append(lst[i])
     
         else: 
             if lst[i] not in lst_final:
@@ -79,20 +81,14 @@ def find_duplicates(lst):
 
 # I.A.3 Búsqueda de par que suma target con complejidad O(n)
 def has_sum_pair(par):
-    """Dada una tupla (lst, target), devuelve True si existen dos elementos
-    distintos en lst que sumen target; de lo contrario devuelve False.
-    """
-    list = par[0]
-    longitud = len (list)
-    target = par[1]
-
-    for n in range(longitud):
-        for i in range (n+1, longitud):
-            if n + i == target:
-                return True
-        
-    else:
-        return False
+    lista, target = par
+    vistos = set()
+    
+    for num in lista:
+        if (target - num) in vistos:
+            return True
+        vistos.add(num)
+    return False
     
 
 # I.B.1 RLE Naive / Ingenuo
@@ -141,14 +137,6 @@ def rle_encode_optimized(lst):
                 
     return last_lst
 
-        
-            
-
-        
-  
- 
-       
-       
 
 
 # Función auxiliar para generar una gráfica de una serie de datos.
@@ -195,10 +183,8 @@ def plot_single_curve(
     plt.show()  # Muestra la figura
 
 
-def init_cd(n: int)-> np.ndarray:
-    p = len(n) * [-1]  # se crea una tabla (lista) de tamaño |n| en la que 
-                       # todas las componentes se inicializan a -1
-    return p
+def init_cd(n: int) -> np.ndarray:
+    return np.full(n, -1, dtype=int)
 
 def find_cc(ind: int, p_cd: np.ndarray) -> int:
     # find the representative
@@ -209,6 +195,7 @@ def find_cc(ind: int, p_cd: np.ndarray) -> int:
         z = p_cd[z]
         
     # compress the path from u to the root
+    u = ind
     while p_cd[u] >-1:
         y = p_cd[u]
         p_cd[u] = z
@@ -218,23 +205,23 @@ def find_cc(ind: int, p_cd: np.ndarray) -> int:
 
 def union(rep_1: int, rep_2: int, p_cd: np.ndarray) -> int:
         
-        x = find_cc(rep_1)
-        y = find_cc(rep_2)
+        x = find_cc(rep_1, p_cd)
+        y = find_cc(rep_2, p_cd)
         
         if x == y:
             return None
         
-        if p_cd[y] < p_cd[x]:      # T_y is taller
+        if p_cd[y] < p_cd[x]:    
             p_cd[x] = y
             return y  
         
-        elif p_cd[y] > p_cd[x]:    # T_x is taller
+        elif p_cd[y] > p_cd[x]:    
             p_cd[y] = x 
             return x
         
-        else:                # T_x, T_y have the same lenght
+        else:               
             p_cd[y] = x
-            p_cd[x] -= 1        # Increase the height
+            p_cd[x] -= 1        
             return   x    
 
 
@@ -244,17 +231,17 @@ def union(rep_1: int, rep_2: int, p_cd: np.ndarray) -> int:
 'subconjuntos del CD y donde el valor de la clave u del dict sea una lista con los miembros del subconjunto'
 'representado por u , incluyendo, por supuesto el propio u .'
 
-def cd_2_dict(p_cd: np.ndarray)-> dict:
-
+def cd_2_dict(p_cd: np.ndarray) -> dict:
     diccionario = dict()
-    longitud = len (p_cd)
-    for i in range (longitud):
-        representante = diccionario(find_cc(i, p_cd))
+    longitud = len(p_cd)
+    for i in range(longitud):
+        representante = find_cc(i, p_cd) 
 
         if representante not in diccionario:
             diccionario[representante] = []
 
         diccionario[representante].append(i)
+    return diccionario
 
 
             
