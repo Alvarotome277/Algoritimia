@@ -227,9 +227,9 @@ def union(rep_1: int, rep_2: int, p_cd: np.ndarray) -> int:
 
 
 
-'que reciba un CD en el array p_cd y devuelva un diccionario cuyas claves sean los representantes de los'
-'subconjuntos del CD y donde el valor de la clave u del dict sea una lista con los miembros del subconjunto'
-'representado por u , incluyendo, por supuesto el propio u .'
+'''que reciba un CD en el array p_cd y devuelva un diccionario cuyas claves sean los representantes de los
+subconjuntos del CD y donde el valor de la clave u del dict sea una lista con los miembros del subconjunto
+representado por u , incluyendo, por supuesto el propio u .'''
 
 def cd_2_dict(p_cd: np.ndarray) -> dict:
     diccionario = dict()
@@ -244,11 +244,50 @@ def cd_2_dict(p_cd: np.ndarray) -> dict:
     return diccionario
 
 
-            
-def ccs(n: int, l: list)-> dict: 
-    diccionario = dict ()
-    longitud = len (l)
-    for i in range (longitud):
-        representante = l [i]
-        diccionario 
+"""Calcula las componentes conexas de un grafo no dirigido con n vértices
+y una lista de aristas l mediante Conjuntos Disjuntos.
+Devuelve un diccionario {representante: [miembros]}.
+"""          
+def ccs(n: int, l: list) -> dict:
 
+    p_cd = init_cd(n)
+    for edge in l:
+        union(edge[0], edge[1], p_cd)
+        
+    return cd_2_dict(p_cd) 
+
+
+
+'''Funcion usada para la cración de gráficas en measure.pdf'''
+
+'''
+def generar_grafica_ejemplo():
+
+    tamanos = [100, 500, 1000, 2000, 3000]
+
+    mediciones = time_measure(
+        f=rle_encode_optimized,
+        dataprep= dataprep_rle ,
+        Nlist=tamanos,
+        Nrep=20,
+        Nstat=10,
+    )
+
+    tiempos_medios = []
+    for media, varianza in mediciones:
+        tiempos_medios.append(media)
+
+    plot_single_curve(
+        x=tamanos,
+        y=tiempos_medios,
+        title="Tiempo de ejecución: RLE OPTIMIZED",
+        xlabel="Tamaño de entrada (n)",
+        ylabel="Tiempo medio (segundos)",
+        color="g",
+        filename="grafica_rle_opt.pdf",
+    )
+
+
+if __name__ == "__main__":
+    generar_grafica_ejemplo()
+'''
