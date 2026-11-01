@@ -37,11 +37,20 @@ def compare_change(coins: List[int], max_amount: int) -> Dict[str, List[int]]:
 # =============================================================================
 
 def activity_selection(activities: List[Tuple[str, int, int]]) -> List[Tuple[str, int, int]]:
-    """
-    Selecciona el máximo número posible de actividades compatibles.
-    Ordena por tiempo de finalización ascendente, y en caso de empate por inicio e identificador.
-    """
-    pass
+    conj_dia = []
+    o_activities = []
+    registro = 0
+
+    o_activities= sorted(activities,key= lambda t: t[2] ,reverse= False)
+        
+    for n in o_activities:
+        if registro <= n[1]:
+            conj_dia.append(n)
+            registro= n[2]
+
+    return conj_dia
+
+
 
 def generate_activities(n: int, seed: int = 42) -> List[Tuple[str, int, int]]:
     """
@@ -55,15 +64,35 @@ def generate_activities(n: int, seed: int = 42) -> List[Tuple[str, int, int]]:
 # =============================================================================
 
 def job_scheduling(jobs: List[Tuple[str, int, int]]) -> Tuple[List[Optional[Tuple[str, int, int]]], int]:
-    """
-    Planificación de tareas de duración unitaria con fecha límite (deadline).
-    Devuelve la secuencia de tareas asignadas (con None para intervalos vacíos) y el beneficio total.
-    """
-    pass
+
+    
+    ordered_jobs = sorted(jobs, key=lambda t: (-t[2], t[1], t[0]))
+
+    max_deadline = max(t[1] for t in jobs)
+    schedule = [None] * max_deadline
+    count = 0
+
+    for n in ordered_jobs:
+        '''empieza, fin, paso'''
+        for i in range(n[1] - 1, -1, -1):
+            if schedule[i] is None:
+                schedule[i] = n
+                count += n[2]
+                break   
+
+    return schedule, count
+
+
+
 
 def generate_jobs(n: int, seed: int = 42) -> List[Tuple[str, int, int]]:
-    """
-    Genera n tareas aleatorias con fecha límite reproducibles.
-    profit en [1, 1000], deadline en [1, max(1, n // 10)].
-    """
-    pass
+    random.seed(seed)
+    max_deadline = max(1, n // 10)
+    jobs = []
+
+    for i in range(n):
+        profit = random.randint(1, 1000)
+        deadline = random.randint(1, max_deadline)
+        jobs.append((f"J{i}", profit, deadline))
+        
+    return jobs
