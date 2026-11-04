@@ -12,18 +12,47 @@ import random
 # =============================================================================
 
 def greedy_change(coins: List[int], amount: int) -> Tuple[List[int], int]:
-    """
-    Estrategia codiciosa para el problema del cambio de monedas.
-    Selecciona en cada paso la moneda de mayor valor que no supere la cantidad restante.
-    """
-    pass
-
+    coins.sort(reverse=True)
+    used_coins = []
+    for coin in coins:
+        while (amount>=coin):  
+            used_coins.append(coin)
+            amount = amount - coin
+    
+    return used_coins, amount
+    
 def optimal_change(coins: List[int], amount: int) -> Optional[List[int]]:
-    """
-    Solución óptima mediante programación dinámica para el problema del cambio de monedas.
-    Determina el menor número de monedas necesario para obtener la cantidad objetivo.
-    """
-    pass
+    infinite = float('inf')
+    filas = len(coins) + 1
+    columnas = amount + 1
+    matriz = [[infinite for _ in range(columnas)] for _ in range(filas)]
+    for a in range(1, columnas):
+        matriz[0][a] = float('inf')
+        for i in range (1,filas):
+           coin = coins[i-1]
+           if a < coin:
+                matriz[i][a] = matriz[i-1][a]
+           else:
+                matriz[i][a] = min(matriz[i-1][a], 1 + matriz[i] [a-coin])
+    if matriz[-1][-1] == float('inf'):
+            return None
+            
+    resultado = []
+    i = len(coins)
+    a = amount
+    
+    while a > 0:
+        
+        if matriz[i][a] == matriz[i-1][a]:
+            i -= 1
+        
+        else:
+            resultado.append(coins[i-1])
+            a -= coins[i-1] 
+            
+    return resultado
+    
+    
 
 def compare_change(coins: List[int], max_amount: int) -> Dict[str, List[int]]:
     """
