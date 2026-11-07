@@ -59,6 +59,31 @@ def compare_change(coins: List[int], max_amount: int) -> Dict[str, List[int]]:
     Evalúa todas las cantidades entre 1 y max_amount, clasifica cada cantidad en
     'optimal', 'suboptimal', 'greedy_failed' o 'impossible'.
     """
+    clasificacion = {
+        "optimal": [],
+        "suboptimal": [],
+        "greedy_failed": [],
+        "impossible": []
+    }
+
+    coins_copy = coins.copy()
+    
+    for amount in range(1, max_amount + 1):
+
+        greedy_coins, greedy_remainder = greedy_change(coins_copy, amount)
+        opt_coins = optimal_change(coins, amount)
+
+
+        if opt_coins is None:
+            clasificacion["impossible"].append(amount)
+        elif greedy_remainder != 0:
+            clasificacion["greedy_failed"].append(amount)
+        elif len(greedy_coins) == len(opt_coins):
+            clasificacion["optimal"].append(amount)
+        else:
+            clasificacion["suboptimal"].append(amount)
+            
+    return clasificacion
     pass
 
 # =============================================================================
@@ -82,11 +107,17 @@ def activity_selection(activities: List[Tuple[str, int, int]]) -> List[Tuple[str
 
 
 def generate_activities(n: int, seed: int = 42) -> List[Tuple[str, int, int]]:
-    """
-    Genera n actividades aleatorias reproducibles.
-    start en [0, 10000], duration en [1, 100], end = start + duration.
-    """
-    pass
+    random.seed(seed)
+    activities = []
+    
+    for i in range(n):
+        identificador = f"A{i}"
+        start = random.randint(0, 10000)
+        duration = random.randint(1, 100)
+        end = start + duration
+        activities.append((identificador, start, end))
+        
+    return activities
 
 # =============================================================================
 # III. Planificación de tareas con fechas límite
